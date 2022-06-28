@@ -100,10 +100,9 @@ load(file = "../data/subreddits.rda")
 user_list <- unique(subreddits$data.author)
 user_list <- user_list[user_list != "[deleted]"]
 #already scraped 91, continuing form 92
-#user_list <- user_list[c(93:8547)]
 
 #Armin
-#user_list <- user_list[c(93:3000)]
+#user_list <- user_list[c(138:3000)]
 #Armin2
 #user_list <- user_list[c(3001:5999)]
 #Brooke
@@ -114,12 +113,19 @@ scrape_users <- function(user){
   base_url <- paste0("https://old.reddit.com/user/", user, "/comments/.json")
   
   t <- list()
+  brokenuser <- tryCatch({
   t[[1]] <- fromJSON(base_url,flatten=T)$data$children
+  }, error = function(e) e)
   
+  if(!inherits(brokenuser, "error")) {
+    
   if (is.data.frame(t[[1]])) {
 
     out <- list()
+    
+    
     out[[1]] <- fromJSON(base_url,flatten=T)$data$children
+    
     
     for(i in 2:1000){
       print(paste0("user = ",user,"; page = ",i))
@@ -140,6 +146,7 @@ scrape_users <- function(user){
     
     do.call("rbind.fill",out)
     
+  }
     }
 }
 
@@ -161,8 +168,12 @@ for (user in user_list) {
 
 }
 #Armin1
-#save(user_all, file = "../data/users2.rda")
+#save(user_all, file = "../data/users2a.rda")
 #Armin2
 #save(user_all, file = "../data/users3.rda")
 #Brooke
 save(user_all, file = "../data/users4.rda")
+
+
+## I use this to see which position a user that resulted in an error is in the list
+#test <- do.call(rbind.data.frame, as.list(user_list))
