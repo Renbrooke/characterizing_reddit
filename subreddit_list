@@ -1,0 +1,12 @@
+# =========================================
+# SUBREDDIT LIST FROM ARMIN
+# =========================================
+
+subreddits <- c("AHomeForPlagueRats", "Anarcho_Capitalism", "AntiWhitePrejudice", "AskThe_Donald", "benshapiro", "BidenBuzz", "BidenIsNotMyPresident",
+                "BreitbartNews", "CabalCrusher", "ChurchOfCOVID", "climateskeptics", "CollegeRepublicans", "Conservativelifestyle", "ConservativeMemes",
+                "ConservativesOnly", "conspiracy", "CoronavirusCirclejerk", "DarkMAGA", "DebateVaccines", "DNCleaks", "EasternSunRising", 
+                "FauciForPrison", "FightingFakeNews", "Firearms", "FreedomConvoy2022", "GlobalLockdown", "IvankaTrump", "libertarianmeme",
+                "libsofreddit", "LouderWithCrowder", "MensRights", "non_msm", "NPCMemes", "NurembergTwo", "progun", "QuiteFrankly", 
+                "Red_Suppository", "RedPillWomen", "rittenhouse", "samharris", "The_Farage", "TheBidenshitshow", "TheTrumpZone", "TrueChristian",
+                "trump", "Trumpgret", "tucker_carlson", "UNAgenda21", "walkaway")
+## 49 subreddits in total
