@@ -97,6 +97,7 @@ save(subreddits, file = "../data/subreddits.rda")
 ##  Scrape Users 
 ################################################################################
 load(file = "../data/subreddits.rda")
+getwd()
 user_list <- unique(subreddits$data.author)
 user_list <- user_list[user_list != "[deleted]"]
 #already scraped 91, continuing form 92
@@ -106,7 +107,9 @@ user_list <- user_list[user_list != "[deleted]"]
 #Armin2
 #user_list <- user_list[c(3001:5999)]
 #Brooke
-user_list <- user_list[c(6000:8547)]
+#user_list <- user_list[c(6000:8547)]
+# Brooke (new batch after error)
+user_list <- user_list[c(6278:8547)]
 
 scrape_users <- function(user){
   
@@ -150,12 +153,13 @@ scrape_users <- function(user){
     }
 }
 
-user_all <- data.frame(data.link_title=character(),
-                       data.score=integer(), 
-                       data.subreddit=character(), 
-                       data.author=character(), 
-                       data.body=character(),
-                       stringsAsFactors=FALSE)
+# commented out since still working on saving:
+# user_all <- data.frame(data.link_title=character(),
+#                       data.score=integer(), 
+#                       data.subreddit=character(), 
+#                       data.author=character(), 
+#                       data.body=character(),
+#                       stringsAsFactors=FALSE)
 
 for (user in user_list) {
   user <- scrape_users(user)
@@ -172,8 +176,9 @@ for (user in user_list) {
 #Armin2
 #save(user_all, file = "../data/users3.rda")
 #Brooke
+save(user_all, file = "../data/users4a.rda")
 save(user_all, file = "../data/users4.rda")
 
-
 ## I use this to see which position a user that resulted in an error is in the list
-#test <- do.call(rbind.data.frame, as.list(user_list))
+test <- do.call(rbind.data.frame, as.list(user_list))
+view(test)
