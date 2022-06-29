@@ -43,10 +43,18 @@ length(unique(data$data.body))
 length(unique(data$data.body[!data$data.subreddit %in% sub_list]))
 
 ###! Problem: We would have to identify other extreme right subreddits in the data, but how? We can't go through 22,526 subreddits.
-## Reduce data, only keep user that have >=25 posts
+## Reduce data, only keep user that have >=25 posts ** 
 data <- data %>%
   filter(posts_all >= 25) %>%
   filter(comment_count >= 10)
+
+# changing to >=75 posts in order to simplify
+data <- data %>%
+  filter(posts_all >= 75) %>%
+  filter(comment_count >= 10)
+
+# 
+
 
 #save list of subreddits to look through:
 all_subs <- data %>%
@@ -71,7 +79,6 @@ length(unique(data$data.body[!data$data.subreddit %in% sub_list]))
 
 
 # How to identify meaningful groups of subreddits?
-# Brooke will try word embedding
 
 
 # Armin will use more or less manual coding with some pattern recognition
@@ -86,7 +93,7 @@ gaming <- c("witcher|gaming|xboxone|sonic|league|reddeadredemption|ghostrecon
             |battletech|valorant")
 tipps <- c("travelhacks|coolguides|^travel$")
 occupation <- c("engineering|auslaw|auslegal|supplychain|pharmacist")
-tech <- c("beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator")
+tech <- c("beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator|samsung")
 covid <- c("^vacc|^vax|lockdownskeptic|realvaccinedebate|lockdowncrit|imdonewithcovid|corona|covid|plaguerats|actualscience")
 leftwing <- c("agorism|appalachistan", "againsthatesubreddits|wayofthebern|antiwork|leftpodcasts")
 finance <- c("ethere|ethtrader|bitcoin|bbig|ausfinance|algotrading|crypto|wallstreet|market|invest|stonk|stock|asx_bets")
