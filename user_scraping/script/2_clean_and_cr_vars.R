@@ -25,7 +25,11 @@ sub_list = c("AHomeForPlagueRats", "Anarcho_Capitalism", "AntiWhitePrejudice",
 
 final_data <- readRDS(file = "../data/final_data.rds") 
 
-data <- final_data
+data <- final_data %>%
+  select(-contains("source_")) %>%
+  group_by(data.subreddit) %>%
+  mutate(comment_count = n()) %>%
+  ungroup()
 
 #how many users
 length(unique(data$data.author))
@@ -40,13 +44,18 @@ length(unique(data$data.body[!data$data.subreddit %in% sub_list]))
 
 ###! Problem: We would have to identify other extreme right subreddits in the data, but how? We can't go through 22,526 subreddits.
 ## Reduce data, only keep user that have >=25 posts
-data <- final_data %>%
-  filter(posts_all >= 25) 
+data <- data %>%
+  filter(posts_all >= 25) %>%
+  filter(comment_count >= 10)
 
 #save list of subreddits to look through:
-all_subs <- as.data.frame(sort(unique(data$data.subreddit[!data$data.subreddit %in% sub_list]))) # down to 2056
+all_subs <- data %>%
+  select(data.subreddit, comment_count) %>%
+  filter(!data.subreddit %in% sub_list) %>%
+  distinct() %>%
+  arrange(data.subreddit)
+  
 write.xlsx(all_subs, file = "../reduced_sublist.xlsx")
-
 
 #check numbers again after the reduction of dataset
 #how many users
@@ -59,3 +68,22 @@ length(unique(data$data.subreddit[!data$data.subreddit %in% sub_list]))
 length(unique(data$data.body))
 #how many posts without extreme right subreddits
 length(unique(data$data.body[!data$data.subreddit %in% sub_list]))
+
+
+# How to identify meaningful groups of subreddits?
+# Brooke will try word embedding
+
+
+# Armin will use more or less manual coding with some pattern recognition
+data <- data %>%
+  mutate(sub_groups = case_when(str_detect(data.subreddit, "conspiracy") ~ "conspiracy",
+                                str_detect(data.subreddit, "gun") ~ "guns",
+                                str_detect(data.subreddit, "") ~ "",
+                                str_detect(data.subreddit, "") ~ "",
+                                str_detect(data.subreddit, "") ~ "",
+                                str_detect(data.subreddit, "") ~ "",
+                                str_detect(data.subreddit, "") ~ "",
+                                str_detect(data.subreddit, "") ~ "",
+                                ))
+
+    filter(str_detect(data.subreddit, "conspiracy"),) 
