@@ -39,14 +39,14 @@ length(unique(data$data.body))
 length(unique(data$data.body[!data$data.subreddit %in% sub_list]))
 
 ###! Problem: We would have to identify other extreme right subreddits in the data, but how? We can't go through 22,526 subreddits.
-## Reduce data, only keep user that have >=50 posts
+## Reduce data, only keep user that have >=25 posts
 data <- final_data %>%
-  filter(posts_all >= 50) %>%
-  filter(!data$data.subreddit %in% sub_list)
+  filter(posts_all >= 25) 
 
 #save list of subreddits to look through:
-all_subs <- as.data.frame(sort(unique(data$data.subreddit))) # down to 1,314
+all_subs <- as.data.frame(sort(unique(data$data.subreddit[!data$data.subreddit %in% sub_list]))) # down to 2056
 write.xlsx(all_subs, file = "../reduced_sublist.xlsx")
+
 
 #check numbers again after the reduction of dataset
 #how many users
