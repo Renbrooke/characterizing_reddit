@@ -48,7 +48,7 @@ data <- data %>%
   filter(posts_all >= 25) %>%
   filter(comment_count >= 10)
 
-# changing to >=75 posts in order to simplify
+# changing to >=75 posts in order to simplify, but this leaves only 48 users
 data <- data %>%
   filter(posts_all >= 75) %>%
   filter(comment_count >= 10)
@@ -62,9 +62,17 @@ all_subs <- data %>%
   filter(!data.subreddit %in% sub_list) %>%
   distinct() %>%
   arrange(data.subreddit)
-  
-write.xlsx(all_subs, file = "../reduced_sublist.xlsx")
 
+# repeated with only users with posts above 75
+all_subs_75 <- data %>%
+  select(data.subreddit, comment_count) %>%
+  filter(!data.subreddit %in% sub_list) %>%
+  distinct() %>%
+  arrange(data.subreddit)
+
+write.xlsx(all_subs, file = "../reduced_sublist_postsall_25.xlsx")
+
+write.xlsx(all_subs_75, file = "../reduced_sublist_75.xlsx" )
 #check numbers again after the reduction of dataset
 #how many users
 length(unique(data$data.author))
@@ -93,7 +101,7 @@ gaming <- c("witcher|gaming|xboxone|sonic|league|reddeadredemption|ghostrecon
             |battletech|valorant")
 tipps <- c("travelhacks|coolguides|^travel$")
 occupation <- c("engineering|auslaw|auslegal|supplychain|pharmacist")
-tech <- c("beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator|samsung")
+tech <- c("beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator") 
 covid <- c("^vacc|^vax|lockdownskeptic|realvaccinedebate|lockdowncrit|imdonewithcovid|corona|covid|plaguerats|actualscience")
 leftwing <- c("agorism|appalachistan", "againsthatesubreddits|wayofthebern|antiwork|leftpodcasts")
 finance <- c("ethere|ethtrader|bitcoin|bbig|ausfinance|algotrading|crypto|wallstreet|market|invest|stonk|stock|asx_bets")
@@ -110,9 +118,9 @@ places <- c("brasil", "sanfrancisco", "california", "arizona",
             "auckland", "australia", "bayarea", "berkeley",
             "england", "europe")
 discussion <- c("capitalismvsocialism", "nostupidquestions", "debate", 
-                "debatereligion", "leftvsrightdebate")
+                "debatereligion", "leftvsrightdebate") #isnt it all discussion? debate religion could just go to religion
 support <- c("agoraphobia", "selfharm", "sex", "anxiety", "aspiememes", "adhd",
-            "adhdmeme", "alcoholism", "autism") ## needs a better name, it's subreddits where people talk about private stuff like illness, sex and stuff and support each other
+            "adhdmeme", "alcoholism", "autism", "depression") #(added depression) ## needs a better name, it's subreddits where people talk about private stuff like illness, sex and stuff and support each other
 memes <- c("adviceanimals") ## this is a problem just using *meme* would take in too many political subreddits
 #try to catch as much as possible with word searches
 schadenfreude <- c("yesyesyesyesno", "yesyesyesno", "winstupidprizes", "thatlookedexpensive", 
@@ -197,7 +205,18 @@ xls <- armin %>%
   arrange(sub_title) %>%
   mutate(url = paste0("https://www.reddit.com/r/",sub_title))
 
-write.xlsx(xls, file = "../ungrouped_sublist.xlsx")   
+write.xlsx(xls, file = "../ungrouped_sublist.xlsx") 
+
+#save unassigned (>=75)
+xls_75 <- armin %>%
+  filter(is.na(sub_groups)) %>%
+  filter(!data.subreddit %in% sub_list) %>%
+  select(sub_title, comment_count) %>%
+  distinct() %>%
+  arrange(sub_title) %>%
+  mutate(url = paste0("https://www.reddit.com/r/",sub_title))
+
+write.xlsx(xls_75, file = "../ungrouped_sublist.xlsx")   
     
 '#notes for later:
 lotuseaters_com << right wing stuff
