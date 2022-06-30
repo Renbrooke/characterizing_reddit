@@ -90,37 +90,37 @@ length(unique(data$data.body[!data$data.subreddit %in% sub_list]))
 
 
 # Armin will use more or less manual coding with some pattern recognition
-cars <- c("4x4|acura|alfa-romeo|aston-martin|audi|bentley|bmw|bugatti|buick|cadillac|chevrolet|chrysler|citroen|dodge|ferrari|fiat|ford|gmc|honda|hyundai|infiniti|jaguar|jeep|kia|lamborghini|lancia|land rover|lexus|lincoln|maserati|maybach|mazda|mclaren|mercedes|mitsubishi|nissan|opel|pagani|peugeot|pontiac|porsche|renault|rolls-royce|skoda|subaru|suzuki|tesla|toyota|volkswagen|volvo|alpina|callaway|caparo|caterham|dacia|daihatsu|datsun|delage|delorean|deltawing racing cars|general motors|hummer|hyperion|lucid motors|morgan|mosler|mullen|nikola motor company|oldsmobile|polestar|radical sportscars|rezvani|rimac automobile|rinspeed|rivian|saab|saleen|shelby|spyker|ssangyong|studebaker|tata|touring superleggera|trident|triumph|tvr|ultima|vauxhall|venturi|vinfast|w motors|wiesmann|yamaha|zagato|zenvo")
+cars <- c("4x4|acura|alfa-romeo|aston-martin|audi|bentley|bmw|bugatti|buick|cadillac|chevrolet|chrysler|citroen|dodge|ferrari|fiat|ford|gmc|honda|hyundai|infiniti|jaguar|jeep|kia|lamborghini|lancia|land rover|lexus|lincoln|maserati|maybach|mazda|mclaren|mercedes|mitsubishi|nissan|opel|pagani|peugeot|pontiac|porsche|renault|rolls-royce|skoda|subaru|suzuki|tesla|toyota|volkswagen|volvo|alpina|callaway|caparo|caterham|dacia|daihatsu|datsun|delage|delorean|deltawing racing cars|general motors|hummer|hyperion|lucid motors|morgan|mosler|mullen|nikola motor company|oldsmobile|polestar|radical sportscars|rezvani|rimac automobile|rinspeed|rivian|saab|saleen|shelby|spyker|ssangyong|studebaker|tata|touring superleggera|trident|triumph|tvr|ultima|vauxhall|venturi|vinfast|w motors|wiesmann|yamaha|zagato|zenvo|electricvehicles") #added electric vehicles
 hobbies <- c("cigar|simulated|pedsr|youtube_startups|aquarium|aquaticsnails|^art$|airsoft
              |woodworking|woodstoving|unity3d|languagelearning|preppers|writing|cooking
-             |aviation|backyardchickens|ballpython")
-music <- c("music|aliceinchains|musicproduction|zappa|edm|eminem")
+             |aviation|backyardchickens|ballpython|fishing") #added fishing
+music <- c("music|aliceinchains|musicproduction|zappa|edm|eminem|classicrock|guitars") #added classicrock, guitars
 sport <- c("bicycling|soccer|nfl|ufc|baseketball")
 gaming <- c("witcher|gaming|xboxone|sonic|league|reddeadredemption|ghostrecon
             |acecombat|videogames|worldofwarships|rpg|aidungeon|battlefield3
             |battletech|valorant")
 tipps <- c("travelhacks|coolguides|^travel$")
 occupation <- c("engineering|auslaw|auslegal|supplychain|pharmacist")
-tech <- c("beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator") 
+tech <- c("beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator|buildapc|firefox") #added buildapc, firefox
 covid <- c("^vacc|^vax|lockdownskeptic|realvaccinedebate|lockdowncrit|imdonewithcovid|corona|covid|plaguerats|actualscience")
 leftwing <- c("agorism|appalachistan", "againsthatesubreddits|wayofthebern|antiwork|leftpodcasts")
-finance <- c("ethere|ethtrader|bitcoin|bbig|ausfinance|algotrading|crypto|wallstreet|market|invest|stonk|stock|asx_bets")
+finance <- c("ethere|ethtrader|bitcoin|bbig|ausfinance|algotrading|crypto|wallstreet|market|invest|stonk|stock|asx_bets|finance") #added finance
 people <- c("vaushv|joerogan|timpool|jordanpeterson|timdillon|normmacdonald|aoc|ronpaul|adamcarolla")
 entertainment <- c("prequel|startrek|bikinibottomtwitter|bettercallsaul|beavisandbutthead|attackontitan|thelastairbender|gravityfalls|starwars|marvel|xmen|amphibia|animaniacs|animemes")
 religion <- c("christ|relig|theis|awakened")
 nsfw <- c("bigtitsinbikinis|bigboobsgw|^bbw$|bdsm|asianscuckingpinkies|^ass$")
-drugs <- c("trees|benzorecovery|benzodiazepines|altcannabinoids|pedsr")
+drugs <- c("trees|benzorecovery|benzodiazepines|altcannabinoids|pedsr|artofrolling|cannabisgrowers|drugs") #added artofrolling, cannabisgrowers
 military <- c("army|combat|warvideo|navy")
 places <- c("brasil", "sanfrancisco", "california", "arizona", 
             "ontario", "canada", "ontariocanada", "britishcolumbia", 
             "casualuk", "china", "france", "rochester", "rochester585",
             "albany", "argentina", "adelaide", "adirondacks",
             "auckland", "australia", "bayarea", "berkeley",
-            "england", "europe")
+            "england", "europe", "calgary", "chicago", "cuba") #added calgary, chicago, cuba
 discussion <- c("capitalismvsocialism", "nostupidquestions", "debate", 
                 "debatereligion", "leftvsrightdebate") #isnt it all discussion? debate religion could just go to religion
 support <- c("agoraphobia", "selfharm", "sex", "anxiety", "aspiememes", "adhd",
-            "adhdmeme", "alcoholism", "autism", "depression") #(added depression) ## needs a better name, it's subreddits where people talk about private stuff like illness, sex and stuff and support each other
+            "adhdmeme", "alcoholism", "autism", "depression", "chronicpain", "chronicillness") #(added depression, chronicpain, chronicillness) ## needs a better name, it's subreddits where people talk about private stuff like illness, sex and stuff and support each other
 memes <- c("adviceanimals") ## this is a problem just using *meme* would take in too many political subreddits
 #try to catch as much as possible with word searches
 schadenfreude <- c("yesyesyesyesno", "yesyesyesno", "winstupidprizes", "thatlookedexpensive", 
@@ -128,8 +128,10 @@ schadenfreude <- c("yesyesyesyesno", "yesyesyesno", "winstupidprizes", "thatlook
                    "actualpublicfreakouts", "instantregret", "instantkarma", "robbersgettingfucked",
                    "averageredditor")
 anger <- c("awfuleverything", "idiotsincars")
-nice_stuff <- c("beamazed|^aww$")
-
+nice_stuff <- c("beamazed|^aww$|cozyplaces") #added cozyplaces
+science <- c("science", "computerscience", "compsci", "datascience", "everythingscience", "dataisbeautiful", "csmajors", "cscareerquestions") #added categories here, but did not implement in below code
+threats <- c("crimeinnyc", "fightporn", "clevercomebacks") # I wanted to label this conflict but it is a base r function
+dating <- c("dating", "datingoverthirty", "datingoverforty")
 
 armin <- data %>%
   mutate(sub_title = tolower(data.subreddit)) %>%
@@ -217,8 +219,11 @@ xls_75 <- armin %>%
   mutate(url = paste0("https://www.reddit.com/r/",sub_title))
 
 write.xlsx(xls_75, file = "../ungrouped_sublist_75.xlsx")   
-    
+
+# added some items in notes below as well    
 '#notes for later:
+badchoicesgoodstories << left wing political stuff
+charlottesville << a place but also might be political?
 lotuseaters_com << right wing stuff
 zeducationsubmissions << right wing stuff
 sounddoctrine << religious right
