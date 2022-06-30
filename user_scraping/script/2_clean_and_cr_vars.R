@@ -216,7 +216,7 @@ xls_75 <- armin %>%
   arrange(sub_title) %>%
   mutate(url = paste0("https://www.reddit.com/r/",sub_title))
 
-write.xlsx(xls_75, file = "../ungrouped_sublist.xlsx")   
+write.xlsx(xls_75, file = "../ungrouped_sublist_75.xlsx")   
     
 '#notes for later:
 lotuseaters_com << right wing stuff
