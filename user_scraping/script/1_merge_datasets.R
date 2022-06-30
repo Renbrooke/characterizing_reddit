@@ -36,11 +36,20 @@ user_data <- distinct(user_data)
 
 # add following information on users:
 # - which subreddit were they sourced from
+# - include a variable that marks if a user is sourced from a subreddit from the reduced list
 # - how many posts did they make in that subreddit
 # - how many posts did they make in all 'extreme' subreddits
 # - in how many 'extreme' subs did the user post
 load("../data/subreddits.rda")
 saveRDS(subreddits, file = "../data/subreddits.rds") #save it again as .rds because I can load that in pipe
+
+sub_list_reduced = c("AskThe_Donald", "BidenBuzz", "BidenIsNotMyPresident",
+                     "BreitbartNews", "CabalCrusher", "DarkMAGA", "DNCleaks", 
+                     "FightingFakeNews", "FreedomConvoy2022", "libsofreddit", 
+                     "MensRights", "non_msm", "NPCMemes", 
+                     "QuiteFrankly", "Red_Suppository", "RedPillWomen", "rittenhouse",
+                     "The_Farage", "TheBidenshitshow", "TheTrumpZone","trump", 
+                     "Trumpgret", "UNAgenda21", "walkaway")
 
 subreddits <- readRDS(file = "../data/subreddits.rds") %>%
   filter(data.author != "[deleted]") %>%
@@ -55,7 +64,12 @@ subreddits <- readRDS(file = "../data/subreddits.rds") %>%
   distinct() %>%
   group_by(data.author) %>%
   mutate(source_sub_count = n()) %>%
-  ungroup()
+  ungroup() %>%
+  mutate(source_red = if_else(source_sub %in% sub_list_reduced, 1, 0)) %>%
+  group_by(data.author) %>%
+  add_tally(wt=source_red, name = "reduced_sources") %>%
+  ungroup() %>%
+  mutate(extreme_pol = if_else(reduced_sources > 1, 1, 0))
 
 
 # pivot source sub titles into wide format
@@ -68,7 +82,7 @@ source_subs <- subreddits %>%
 
 # merge source subreddit info together
 subreddits_fin <- subreddits %>%
-  select(data.author, posts_all, source_sub_count) %>%
+  select(data.author, extreme_pol, posts_all, source_sub_count) %>%
   distinct() %>%
   left_join(., source_subs, by = "data.author")
 
@@ -79,4 +93,3 @@ user_data <- left_join(user_data, subreddits_fin, by = "data.author")
 ##            variable source_SUBNAME gives the number of posts of that user in this source subreddit
 
 saveRDS(user_data, file = "../data/final_data.rds") 
-
