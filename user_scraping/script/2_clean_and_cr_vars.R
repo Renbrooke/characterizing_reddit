@@ -64,7 +64,7 @@ all_subs <- data %>%
   distinct() %>%
   arrange(data.subreddit)
 
-write.xlsx(all_subs, file = "../reduced_sublist.xlsx")
+write.xlsx(all_subs, file = "./reduced_sublist.xlsx")
 
 #check numbers again after the reduction of dataset
 #how many users
@@ -84,20 +84,20 @@ length(unique(data$data.body[!data$data.subreddit %in% sub_list]))
 
 # data_grouped will use more or less manual coding with some pattern recognition
 cars <- c("4x4|acura|alfa-romeo|aston-martin|audi|bentley|bmw|bugatti|buick|cadillac|chevrolet|chrysler|citroen|dodge|ferrari|fiat|ford|gmc|honda|hyundai|infiniti|jaguar|jeep|kia|lamborghini|lancia|land rover|lexus|lincoln|maserati|maybach|mazda|mclaren|mercedes|mitsubishi|nissan|opel|pagani|peugeot|pontiac|porsche|renault|rolls-royce|skoda|subaru|suzuki|tesla|toyota|volkswagen|volvo|alpina|callaway|caparo|caterham|dacia|daihatsu|datsun|delage|delorean|deltawing racing cars|general motors|hummer|hyperion|lucid motors|morgan|mosler|mullen|nikola motor company|oldsmobile|polestar|radical sportscars|rezvani|rimac automobile|rinspeed|rivian|saab|saleen|shelby|spyker|ssangyong|studebaker|tata|touring superleggera|trident|triumph|tvr|ultima|vauxhall|venturi|vinfast|w motors|wiesmann|yamaha|zagato|zenvo|electricvehicles") #added electric vehicles
-hobbies <- c("cigar|simulated|pedsr|youtube_startups|aquarium|aquaticsnails|^art$|airsoft
+hobbies <- c("photography|painting|cigar|simulated|pedsr|youtube_startups|aquarium|aquaticsnails|^art$|airsoft
              |woodworking|woodstoving|unity3d|languagelearning|preppers|writing|cooking
-             |aviation|backyardchickens|ballpython|fishing") #added fishing
-music <- c("music|aliceinchains|musicproduction|zappa|edm|eminem|classicrock|guitars") #added classicrock, guitars
+             |aviation|backyardchickens|ballpython|fishing|sailing") #added fishing, sailing
+music <- c("music|aliceinchains|musicproduction|zappa|edm|eminem|classicrock|guitars|pinkfloyd|vinyl") #added classicrock, guitars
 sport <- c("bicycling|soccer|nfl|ufc|baseketball|^nba$")
 gaming <- c("btd6|pcmasterrace|witcher|gaming|xboxone|sonic|league|reddeadredemption|ghostrecon
             |acecombat|videogames|worldofwarships|rpg|aidungeon|battlefield3
-            |battletech|valorant|fivenightsatfreddys|slaythespire|^amongus")
-tipps <- c("travelhacks|coolguides|^travel$")
-occupation <- c("engineering|auslaw|auslegal|supplychain|pharmacist")
-tech <- c("beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator|buildapc|firefox") #added buildapc, firefox
+            |battletech|valorant|fivenightsatfreddys|slaythespire|^amongus|pathofexile|pathofexilebuilds|patientgamers")
+tipps <- c("travelhacks|coolguides|^travel$|pokemon")
+occupation <- c("engineering|auslaw|auslegal|supplychain|pharmacist|plumbing")
+tech <- c("oculus|beta|windows10|technology|android|androidapps|apolloapp|apple|adobeillustrator|buildapc|firefox|tech|technews") #added buildapc, firefox, tech, technews
 covid <- c("antivax|nurembergtwo|^debatevaccines|^vacc|^vax|lockdownskeptic|realvaccinedebate|lockdowncrit|imdonewithcovid|corona|covid|plaguerats|actualscience")
 leftwing <- c("fuckthealtwrong|therightcantmeme|badchoicesgoodstories|agorism|appalachistan|againsthatesubreddits|wayofthebern|antiwork|leftpodcasts")
-finance <- c("^gme$|ethere|ethtrader|bitcoin|bbig|ausfinance|algotrading|crypto|wallstreet|market|invest|stonk|stock|asx_bets|finance") #added finance
+finance <- c("^gme$|ethere|ethtrader|bitcoin|bbig|ausfinance|algotrading|crypto|wallstreet|market|invest|stonk|stock|asx_bets|finance|personalfinance") #added finance
 people <- c("adamcarolla")
 linfl <- c("vaushv|aoc")
 rinfl <- c("brandonherrara|joerogan|timpool|jordanpeterson|timdillon
@@ -107,19 +107,19 @@ entertainment <- c("^movies$|prequel|startrek|bikinibottomtwitter
                    |bettercallsaul|beavisandbutthead|attackontitan
                    |thelastairbender|gravityfalls|starwars|marvel
                    |xmen|amphibia|animaniacs|animemes|television
-                   |strangerthings")
+                   |strangerthings|podcasts|seinfeld|southpark|stargate|standupcomedy|stevenuniverse|taylorswift|theboys|television|voyager")
 religion <- c("christ|relig|theis|awakened")
 nsfw <- c("bigtitsinbikinis|bigboobsgw|^bbw$|bdsm|asianscuckingpinkies|^ass$")
 drugs <- c("pamedicalmarijuana|chsinfo|trees|benzorecovery|benzodiazepines|altcannabinoids|pedsr|artofrolling|cannabisgrowers|drugs") #added artofrolling, cannabisgrowers
 military <- c("army|combat|warvideo|navy")
 
-places <- c("brasil", "sanfrancisco", "california", "arizona", 
+places <- c("poland", "westvirginia", "washington", "vancouver", "unitedkingdom", "texas", "thailand", "sydney", "sweden", "southcarolina", "spain", "sanjose", "santacruz", "sanantonio", "puertorico", "phoenix", "brasil", "sanfrancisco", "california", "arizona", 
             "ontario", "canada", "ontariocanada", "britishcolumbia", 
             "casualuk", "china", "france", "rochester", "rochester585",
             "albany", "argentina", "adelaide", "adirondacks",
             "auckland", "australia", "bayarea", "berkeley",
             "england", "europe", "calgary", "chicago", "cuba",
-            "ontariotheprovince", "newhampshire", "missouri") #added calgary, chicago, cuba
+            "ontariotheprovince", "newhampshire", "missouri", "nyc", "ohio", "oklahoma", "oregon", "orlando", "ottawa") #added nyc, calgary, chicago, cuba
 discussion <- c("capitalismvsocialism", "nostupidquestions", "debate", 
                 "debatereligion", "leftvsrightdebate") #isnt it all discussion? debate religion could just go to religion
 support <- c("agoraphobia", "selfharm", "sex", "anxiety", "aspiememes", "adhd",
@@ -130,12 +130,12 @@ memes <- c("adviceanimals") ## this is a problem just using *meme* would take in
 schadenfreude <- c("yesyesyesyesno", "yesyesyesno", "winstupidprizes", "thatlookedexpensive", 
                    "publicfreakout", "publicfreakouts", "publicfreakoutsreborn", 
                    "actualpublicfreakouts", "instantregret", "instantkarma", "robbersgettingfucked",
-                   "averageredditor")
+                   "averageredditor", "whatcouldgowrong", "nsfl__", "pettyrevenge", "sadcringe") #added whatcouldgowrong, nsfl__, not sure whether to add nonononoyes
 anger <- c("awfuleverything|idiotsincars")
-nice_stuff <- c("beamazed|^aww$|cozyplaces") #added cozyplaces
-science <- c("science", "computerscience", "compsci", "datascience", "everythingscience", "dataisbeautiful", "csmajors", "cscareerquestions") #added categories here, but did not implement in below code
-threats <- c("crimeinnyc", "fightporn", "clevercomebacks") # I wanted to label this conflict but it is a base r function
-dating <- c("dating", "datingoverthirty", "datingoverforty")
+nice_stuff <- c("beamazed|^aww$|cozyplaces|upliftingnews|oddlysatisfying") #added cozyplaces
+science <- c("physics", "webdev", "theydidthemath", "substack", "space", "python", "science", "computerscience", "compsci", "datascience", "everythingscience", "dataisbeautiful", "csmajors", "cscareerquestions", "programmerhumor") #added categories here, but did not implement in below code
+threats <- c("crimeinnyc", "subredditdrama", "fightporn", "clevercomebacks", "rant", "rants", "rareinsults") # I wanted to label this conflict but it is a base r function
+dating <- c("dating", "datingoverthirty", "datingoverforty", "relationshipadvice")
 extreme <- c("lotuseaters_com", "zeducationsubmissions", "savingcanada", "antiwoke", "anythingpolitical",
              "bidenbordercrisis", "bidenisfinished", "bidenregret", "bidenwatch", "bigdongdesantis", 
              "tolerantleft", "the_chocker", "the_chocker", "the_congress", "the_mueller", "the_seattle",
