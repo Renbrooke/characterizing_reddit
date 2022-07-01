@@ -22,6 +22,7 @@ Visualizations:
 '
 
 library(tidyverse)
+library(scales) 
 
 rm(list = ls())
 data_grouped <- readRDS(file = "../data/data_grouped.rds") 
@@ -42,7 +43,11 @@ plot <- data %>%
   ggplot(aes(x = reorder(sub_groups,group_count), y = group_count)) +
   geom_col() +
   coord_flip() +
-  scale_y_log10()  
+  scale_y_log10() +
+  labs(x = "Subreddit groups", 
+       y = "Number of posts (logarithmic!)") +
+  theme(axis.text=element_text(size=11),
+        axis.title=element_text(size=14,face="bold"))
 plot
 
 # or non logarithmic
@@ -50,8 +55,14 @@ plot <- data %>%
   filter(sub_groups != "source subs") %>%
   ggplot(aes(x = reorder(sub_groups,group_count), y = group_count)) +
   geom_col() +
-  coord_flip()  
+  coord_flip() +
+  labs(x = "Subreddit groups", 
+       y = "Number of posts") +
+  theme(axis.text=element_text(size=13),
+        axis.title=element_text(size=14,face="bold")) +
+  scale_y_continuous(labels = scales::label_number(scale = 1/1000))
 plot
+ggsave(plot, filename = "../output/sub_groups.png",height = 6, width = 10)
 
 #Top subreddits, colored by subreddit type
 plot <- data %>%
@@ -66,8 +77,14 @@ plot <- data %>%
   filter(sub_groups != "source subs" & group_count < 1000) %>%
   ggplot(aes(x = reorder(sub_groups,group_count), y = group_count)) +
   geom_col() +
-  coord_flip()  
+  coord_flip() +
+  labs(x = "Subreddit groups", 
+       y = "Number of posts") +
+  theme(axis.text=element_text(size=13),
+        axis.title=element_text(size=14,face="bold")) +
+  scale_y_continuous(labels = scales::label_number(scale = 1/1000))
 plot
+ggsave(plot, filename = "../output/sub_groups_small.png",height = 6, width = 10)
 
 # Case Study: schadenfreude group of subreddits
 # 
@@ -99,6 +116,33 @@ plot
 # 
 
 # covid: mark obvious disinfo subreddits and broad anti corona regulation subs
+
+plot <- data %>%
+  mutate(misinfo = if_else(
+    sub_title %in% c("nurembergtwo", "ahomeforplaguerats", "debatevaccines", 
+                     "coronaviruscirclejerk", "churchofcovid", "cultofcorona", 
+                     "lockdownskepticismau", "lockdowncriticalleft", 
+                     "vaccinememes", "vaccinepassport", "vaccinelonghauler", 
+                     "actualscience", "coronavirusuncensored", 
+                     "norcallockdownskeptic", "ahomeforplagueratscan", 
+                     "covidmemes", "imdonewithcovid" ), "Misinfo/\nAnti-reg.", "Other")) %>%
+  filter(sub_groups == "covid" & group_count > 200) %>%
+  ggplot(aes(x = reorder(sub_title,sub_count), y = sub_count)) +
+  geom_count()  +
+  coord_flip() +
+  labs(x = "Subreddits within the -covid- category", 
+       y = "Number of posts") +
+  theme(axis.text=element_text(size=13),
+        axis.title=element_text(size=15,face="bold"),
+        legend.text = element_text(size=13),
+        legend.position = c(.98, .5),
+        legend.justification = c("right", "top"),
+        legend.box.just = "right",
+        legend.margin = margin(6, 6, 6, 6),
+        legend.title = element_blank()) 
+plot 
+ggsave(plot, filename = "../output/covid_bw.png",height = 6, width = 10)
+
 plot <- data %>%
   mutate(misinfo = if_else(
     sub_title %in% c("nurembergtwo", "ahomeforplaguerats", "debatevaccines", 
@@ -112,8 +156,21 @@ plot <- data %>%
   ggplot(aes(x = reorder(sub_title,sub_count), y = sub_count, color = misinfo)) +
   geom_count()  +
   coord_flip() +
-  scale_y_log10() #I think this one is worth not doing a logarithmic function, just to show how far the "other" subreddits trail behind the misinfo/anti-reg.
-plot
+  labs(x = "Subreddits within the -covid- category", 
+       y = "Number of posts") +
+  theme(axis.text=element_text(size=13),
+        axis.title=element_text(size=15,face="bold"),
+        legend.text = element_text(size=13),
+        legend.position = c(.98, .5),
+        legend.justification = c("right", "top"),
+        legend.box.just = "right",
+        legend.margin = margin(6, 6, 6, 6),
+        legend.title = element_blank()) 
+plot 
+ggsave(plot, filename = "../output/covid_misinfo.png",height = 6, width = 10)
+
+
+
 
 ##### WORD COUNTING
 # politician mentioned!
@@ -133,6 +190,10 @@ install.packages("RColorBrewer")
 install.packages("wordcloud2")
 install.packages("tm")
 install.packages("NLP")
+install.packages("textdata")
+install.packages("reshape2")
+
+library(reshape2)
 library(NLP)
 library(tm)
 library(tokenizers)
@@ -143,18 +204,26 @@ library(hunspell)
 library(wordcloud)
 library(RColorBrewer)
 library(wordcloud2)
-??snowball
+library(textdata)
 
-extr_subs <- data_grouped #%>%  # <<<<<<<<<<<<<<<<<<<<<<<< maybe more interesting if not only extreme right subreddits
-  #distinct(data.body) %>%
-  #filter(sub_groups == "source subs" | sub_groups == "extreme right")
+extr_subs <- data_grouped %>%
+  mutate(big_groups = case_when(
+    sub_groups %in% c("conspiracy","anarcho-capitalism",
+                     "influencers, right","pro-republican",
+                     "source subs", "extreme right","anti-communist") ~ "Right-wing",
+    sub_groups == "general, pol" ~ "General, politics", 
+    sub_groups %in% c("places","general, non-pol","hobbies/interests",
+                      "gaming", "entertainment","occupation","sports",
+                      "cars","tipps", "music", "support") ~ "Hobbies and co.",
+    sub_groups == "schadenfreude" ~ "Schadenfreude"))
+    
 
 
-extr_token <- tokenize_words(extr_subs$data.body, 
-                             lowercase = TRUE,
-                             strip_punct = TRUE,
-                             strip_numeric = TRUE)
+#%>%  # <<<<<<<<<<<<<<<<<<<<<<<< maybe more interesting if not only extreme right subreddits
+#distinct(data.body) %>%
+#filter(sub_groups %in% )
 
+#stupid, but unfortunately no time for better
 extr_words <- extr_subs %>%
   unnest_tokens(words, data.body) %>%
   filter(!(words %in% stopwords::stopwords(source = "stopwords-iso")))
@@ -171,8 +240,6 @@ extr_words$words <- gsub("[0123456789]", "", extr_words$words)
 # vs the other, unrelated subreddits? 
 #
 # script for sentiment analysis
-install.packages("textdata")
-library(textdata)
 
 nrc_sentiments <- get_sentiments("nrc") %>%
   select(word, sentiment)
@@ -184,7 +251,7 @@ extr_words_t <- extr_words %>%
 #inner join and sentiment analysis of words
 subreddit_sentiments <- extr_words_t %>% 
   inner_join(nrc_sentiments, by = "word") %>%
-  select(data.subreddit, data.author, word, sentiment)
+  select(big_groups, word, sentiment)
 
 # need to count and compare the frequencies of each sentiment for 
 #two categories: extreme vs other subreddits
@@ -195,26 +262,44 @@ subreddit_sentiments <- extr_words_t %>%
 #Frequency of subreddit group sentiments <<<< recommend going with this: better potential for visualization, fewer NA fields
 subgroup_sentiment_count <- extr_words_t %>%
   inner_join(nrc_sentiments, by = "word") %>%
-  count(sub_groups, sentiment) %>%
-  spread(sub_groups, n)
+  count(big_groups, sentiment) %>%
+  spread(big_groups, n)
 
-subgroup_sentiment_count
+dat_l <- melt(subgroup_sentiment_count, id.vars = c("sentiment"))  %>%
+  group_by(variable) %>%
+  mutate(group = sum(value)) %>%
+  ungroup() %>%
+  mutate(perc = round((value/group)*100))
+
+plot <- dat_l %>%
+  filter(variable != "<NA>") %>%
+  ggplot(aes(x = variable, y=perc, group=reorder(sentiment,value), fill = sentiment, color=perc)) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  theme(axis.text=element_text(size=13),
+        axis.title=element_text(size=15,face="bold")) +
+  labs(x = "Subreddit groups", 
+       y = "Percent of posts") 
+plot
+ggsave(plot, filename = "../output/sentiments.png",height = 6, width = 10)
+
+
 #NOTE: just also need to rerun the script with a few additional newly categorized subreddits (see updates to script)
 
 # probably also need to turn this into a proportion for better comparison
 # subgroup_sentiment_count %>%
- # mutate = 
- # not sure how to code this part^
+# mutate = 
+# not sure how to code this part^
 
 #Frequency of subreddit sentiments
 sub_sentiment_count <- extr_words_t %>%
   inner_join(nrc_sentiments, by = "word") %>%
   count(data.subreddit, sentiment) %>% 
   spread(data.subreddit, n)
-  
+
 sub_sentiment_count
 
-  #summarize the overall sentiment of posts and users
+#summarize the overall sentiment of posts and users
 # perhaps we could also do a word cloud for sentiments?
 
 
@@ -222,7 +307,7 @@ extr_words <- extr_words %>%
   filter(!extr_words$words=="",
          !str_detect(words, "^its$|^dont$|^2$|^day$|^im$|^thats$|^yeah$|^lol$|^lot$|^youre$"),   #<<<<<<<<<<<<<<< DELETE USELESS WORDS #added more words to delete here: yeah, lol, lot, youre
          !extr_words$words=="people") ##probably should not delete this 
-  
+
 extr_count <- extr_words %>% 
   count(words) %>%
   arrange(desc(n)) %>%
@@ -231,8 +316,12 @@ extr_count <- extr_words %>%
 view(extr_count)  #                  <<<<<<<<<<< CHECK FOR USELESS WORDS
 
 set.seed(1234)
-wordcloud(words = extr_count$words, freq = extr_count$n, min.freq = 40,
-          max.words=Inf, random.order=FALSE, rot.per=0.35,
+wordcloud(words = extr_count$words, freq = extr_count$n, min.freq = 300,
+          max.words=300, random.order=FALSE, rot.per=0.35,
           colors=brewer.pal(8, "Dark2"))
-  
-wordcloud2(extr_count)   #<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WE SHOULD USE THIS, WITH OPTIONS
+
+wordcloud2(extr_count,
+           size = 0.5,
+           color = "random-dark", 
+           backgroundColor = "white",
+           shuffle = TRUE)   #<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WE SHOULD USE THIS, WITH OPTIONS
