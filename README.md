@@ -1,2 +1,2 @@
 # characterizing_reddit
-SICSS project characterizing Reddit participation of certain users
+SICSS 2022 project characterizing Reddit participation of certain users
